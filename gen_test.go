@@ -38,7 +38,8 @@ import (
 	"testing"
 	"time"
 
-	"code.google.com/p/freetype-go/freetype/raster"
+	"github.com/golang/freetype"
+	"github.com/golang/freetype/raster"
 	"github.com/jonas-p/go-shp"
 )
 
@@ -107,11 +108,11 @@ func worldImage(t *testing.T) (im *image.RGBA, zoneOfColor map[color.RGBA]string
 		painter := raster.NewRGBAPainter(im)
 		painter.SetColor(col)
 		r := raster.NewRasterizer(width, height)
-		r.Start(raster.Point{X: raster.Fix32(xys[0]) << 8, Y: raster.Fix32(xys[1]) << 8})
+		r.Start(freetype.Pt(xys[0], xys[1]))
 		for i := 2; i < len(xys); i += 2 {
-			r.Add1(raster.Point{X: raster.Fix32(xys[i]) << 8, Y: raster.Fix32(xys[i+1]) << 8})
+			r.Add1(freetype.Pt(xys[i], xys[i+1]))
 		}
-		r.Add1(raster.Point{X: raster.Fix32(xys[0]) << 8, Y: raster.Fix32(xys[1]) << 8})
+		r.Add1(freetype.Pt(xys[0], xys[1]))
 		r.Rasterize(raster.NewMonochromePainter(painter))
 	}
 
